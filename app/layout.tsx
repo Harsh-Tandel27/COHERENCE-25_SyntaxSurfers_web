@@ -4,7 +4,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import LandingPage from "@/components/landing-page";
 
 const geistSans = Inter({
   subsets: ["latin"],
@@ -32,8 +31,8 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
           <body className={`${geistSans.className} antialiased w-full h-full`}>
             {/* <AppBar /> */}
-            {/* <DashboardSidebar>{children}</DashboardSidebar> */}
-            <LandingPage></LandingPage>
+            <DashboardSidebar>{children}</DashboardSidebar>
+            {/* <LandingPage></LandingPage> */}
             {/* {children} */}
           </body>
         </html>
