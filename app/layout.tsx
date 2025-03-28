@@ -1,3 +1,4 @@
+import Header from "@/components/header";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
@@ -32,6 +33,8 @@ export default function RootLayout({
             {/* <AppBar /> */}
             {/* <DashboardSidebar>{children}</DashboardSidebar> */}
             {/* <LandingPage></LandingPage> */}
+            <Header />
+
             {children}
           </body>
         </html>

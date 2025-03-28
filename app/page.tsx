@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,64 +8,36 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { saveUserToFirebase } from "@/config/firebase";
+import { useUser } from "@clerk/nextjs";
 import {
   BarChart3,
   Cloud,
   Droplets,
-  Home,
   Lightbulb,
-  Menu,
   MessageSquare,
   ShieldAlert,
   Truck,
   User,
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function LandingPage() {
+  const { user } = useUser();
+
+  useEffect(() => {
+    const saveUser = async () => {
+      if (user) {
+        // Save user data to Firebase
+        await saveUserToFirebase(user);
+      }
+    };
+    saveUser();
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Navbar */}
-      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container px-5 flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2 font-bold text-xl">
-            <Cloud className="h-6 w-6 text-primary" />
-            <span>SmartCity</span>
-          </div>
-
-          {/* Mobile menu button */}
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-6 w-6" />
-          </Button>
-
-          {/* Desktop navigation */}
-          <nav className="hidden md:flex items-center justify-center gap-6">
-            <Link
-              href="/"
-              className="text-sm font-medium flex items-center gap-1 text-primary"
-            >
-              <Home className="h-4 w-4" />
-              Home
-            </Link>
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium flex items-center gap-1 transition-colors hover:text-primary"
-            >
-              <BarChart3 className="h-4 w-4" />
-              Dashboard
-            </Link>
-
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-            <SignedOut>
-              <Link href="/sign-in">Sign in</Link>
-            </SignedOut>
-          </nav>
-        </div>
-      </header>
-
       <main className="">
         {/* Hero Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-background to-muted">
