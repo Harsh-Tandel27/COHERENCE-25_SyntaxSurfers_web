@@ -1,4 +1,5 @@
 import AppBar from "@/components/AppBar";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -19,13 +20,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${geistSans.className} antialiased w-full h-full`}>
-          <AppBar />
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem
+      disableTransitionOnChange
+    >
+      {" "}
+      <ClerkProvider>
+        <html lang="en" suppressHydrationWarning>
+          <body className={`${geistSans.className} antialiased w-full h-full`}>
+            <AppBar />
+            {/* <DashboardSidebar>{children}</DashboardSidebar> */}
+            {children}
+          </body>
+        </html>
+      </ClerkProvider>
+    </ThemeProvider>
   );
 }
