@@ -1,59 +1,102 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Hospital, MapPin, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useGeoLocation } from "@/hooks/useGeoLoc";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { Navigation } from "lucide-react";
+import { useEffect, useState } from "react";
 
 // Load API key from environment variables
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
+const GOOGLE_MAPS_API_KEY = process.env
+  .NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
 
 const mapContainerStyle = { width: "100%", height: "100vh" };
 const defaultCenter = { lat: 40.7128, lng: -74.006 };
 
 // Mock data for emergency locations
 const emergencyLocations = [
-  { id: 1, name: "Central Hospital", type: "hospital", lat: 40.7128, lng: -74.006 },
-  { id: 2, name: "North Fire Station", type: "fire", lat: 40.7228, lng: -74.016 },
-  { id: 3, name: "East Police Station", type: "police", lat: 40.7148, lng: -73.996 },
-  { id: 4, name: "South Medical Center", type: "hospital", lat: 40.7028, lng: -74.006 },
+  {
+    id: 1,
+    name: "Central Hospital",
+    type: "hospital",
+    lat: 40.7128,
+    lng: -74.006,
+  },
+  {
+    id: 2,
+    name: "North Fire Station",
+    type: "fire",
+    lat: 40.7228,
+    lng: -74.016,
+  },
+  {
+    id: 3,
+    name: "East Police Station",
+    type: "police",
+    lat: 40.7148,
+    lng: -73.996,
+  },
+  {
+    id: 4,
+    name: "South Medical Center",
+    type: "hospital",
+    lat: 40.7028,
+    lng: -74.006,
+  },
 ];
 
 // Mock data for traffic incidents
 const trafficIncidents = [
-  { id: 1, description: "Major accident on Main St", severity: "high", lat: 40.7138, lng: -74.016 },
-  { id: 2, description: "Road construction on 5th Ave", severity: "medium", lat: 40.7228, lng: -74.026 },
-  { id: 3, description: "Traffic congestion on Broadway", severity: "low", lat: 40.7048, lng: -73.986 },
+  {
+    id: 1,
+    description: "Major accident on Main St",
+    severity: "high",
+    lat: 40.7138,
+    lng: -74.016,
+  },
+  {
+    id: 2,
+    description: "Road construction on 5th Ave",
+    severity: "medium",
+    lat: 40.7228,
+    lng: -74.026,
+  },
+  {
+    id: 3,
+    description: "Traffic congestion on Broadway",
+    severity: "low",
+    lat: 40.7048,
+    lng: -73.986,
+  },
 ];
 
 export function MapSection() {
   const [activeTab, setActiveTab] = useState("traffic");
+  const { location } = useGeoLocation();
   const [currentLocation, setCurrentLocation] = useState(defaultCenter);
-  const [markerIcons, setMarkerIcons] = useState<{ [key: string]: google.maps.Icon }>({});
+  const [markerIcons, setMarkerIcons] = useState<{
+    [key: string]: google.maps.Icon;
+  }>({});
 
   // Get user's current location
-  const handleCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setCurrentLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-        },
-        (error) => {
-          console.error("Error fetching location:", error.message, error.code);
-          alert(`Error fetching location: ${error.message} (Code: ${error.code})`);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-      alert("Geolocation is not supported by your browser.");
+  // const handleCurrentLocation = () => {
+  //   console.log("location", location);
+  //   if (location) {
+  //   } else {
+  //     console.error("Geolocation is not supported by this browser.");
+  //     alert("Geolocation is not supported by your browser.");
+  //   }
+  // };
+
+  useEffect(() => {
+    if (location) {
+      setCurrentLocation({
+        lat: location.latitude,
+        lng: location.longitude,
+      });
     }
-  };
-  
+  }, []);
+
   // Load marker icons once Google Maps is available
   useEffect(() => {
     if (window.google) {
@@ -93,34 +136,42 @@ export function MapSection() {
   return (
     <div className="relative h-full">
       <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
-        <GoogleMap mapContainerStyle={mapContainerStyle} center={currentLocation} zoom={12}>
-          {/* Traffic Incidents Markers */}
-          {activeTab === "traffic" &&
-            trafficIncidents.map((incident) => (
-              <Marker
-                key={incident.id}
-                position={{ lat: incident.lat, lng: incident.lng }}
-                icon={markerIcons[incident.severity]}
-              />
-            ))}
+        {currentLocation ? (
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={currentLocation}
+            zoom={12}
+          >
+            {/* Traffic Incidents Markers */}
+            {activeTab === "traffic" &&
+              trafficIncidents.map((incident) => (
+                <Marker
+                  key={incident.id}
+                  position={{ lat: incident.lat, lng: incident.lng }}
+                  icon={markerIcons[incident.severity]}
+                />
+              ))}
 
-          {/* Emergency Locations Markers */}
-          {activeTab === "emergency" &&
-            emergencyLocations.map((location) => (
-              <Marker
-                key={location.id}
-                position={{ lat: location.lat, lng: location.lng }}
-                icon={markerIcons[location.type]}
-              />
-            ))}
+            {/* Emergency Locations Markers */}
+            {activeTab === "emergency" &&
+              emergencyLocations.map((location) => (
+                <Marker
+                  key={location.id}
+                  position={{ lat: location.lat, lng: location.lng }}
+                  icon={markerIcons[location.type]}
+                />
+              ))}
 
-          {/* User's Current Location Marker */}
-          <Marker position={currentLocation} icon={markerIcons["user"]} />
-        </GoogleMap>
+            {/* User's Current Location Marker */}
+            <Marker position={currentLocation} icon={markerIcons["user"]} />
+          </GoogleMap>
+        ) : (
+          "Location Not Allowed"
+        )}
       </LoadScript>
 
       {/* Tabs for switching views */}
-      <div className="absolute top-4 right-4 z-10">
+      {/* <div className="absolute top-4 right-4 z-10">
         <Tabs
           defaultValue="traffic"
           className="w-[250px] bg-white/90 backdrop-blur-sm rounded-lg shadow-lg"
@@ -177,11 +228,16 @@ export function MapSection() {
             </div>
           </TabsContent>
         </Tabs>
-      </div>
+      </div> */}
 
       {/* Button to get current location */}
       <div className="absolute bottom-4 left-4 z-10">
-        <Button size="sm" variant="secondary" className="shadow-lg" onClick={handleCurrentLocation}>
+        <Button
+          size="sm"
+          variant="secondary"
+          className="shadow-lg"
+          // onClick={handleCurrentLocation}
+        >
           <Navigation className="h-4 w-4 mr-2" />
           Current Location
         </Button>

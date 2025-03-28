@@ -1,8 +1,9 @@
+import { DashboardSidebar } from "@/components/dashboard-sidebar";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 
 const geistSans = Inter({
   subsets: ["latin"],
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   description: "Hackathon Project",
 };
 
-export default function RootLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -30,9 +31,9 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
           <body className={`${geistSans.className} antialiased w-full h-full`}>
             {/* <AppBar /> */}
-            {/* <DashboardSidebar>{children}</DashboardSidebar> */}
+            <DashboardSidebar>{children}</DashboardSidebar>
             {/* <LandingPage></LandingPage> */}
-            {children}
+            {/* {children} */}
           </body>
         </html>
       </ClerkProvider>

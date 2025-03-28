@@ -56,7 +56,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <main className="border">
+      <main className="">
         {/* Hero Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-background to-muted">
           <div className="container px-4 md:px-6">
@@ -74,10 +74,10 @@ export default function LandingPage() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button size="lg" asChild>
-                    <Link href="/signup">Get Started</Link>
+                    <Link href="/dashboard">Get Started</Link>
                   </Button>
                   <Button size="lg" variant="outline" asChild>
-                    <Link href="/demo">View Demo</Link>
+                    <Link href="/dashboard">View Demo</Link>
                   </Button>
                 </div>
               </div>
