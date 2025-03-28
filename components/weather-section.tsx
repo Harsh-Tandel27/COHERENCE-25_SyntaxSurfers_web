@@ -127,7 +127,7 @@ export function WeatherSection() {
 
   return (
     <>
-      <Card className="shadow-lg">
+      <Card className="shadow-lg border-none">
         <CardHeader>
           <CardTitle>Weather Conditions</CardTitle>
           <CardDescription>
@@ -158,7 +158,7 @@ export function WeatherSection() {
         </CardContent>
       </Card>
 
-      <Card className="shadow-lg mt-6">
+      <Card className="shadow-lg mt-6 border-none">
         <CardHeader>
           <CardTitle>Air Quality</CardTitle>
         </CardHeader>
