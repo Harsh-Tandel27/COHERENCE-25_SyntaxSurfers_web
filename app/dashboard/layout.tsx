@@ -1,4 +1,3 @@
-import { DashboardSidebar } from "@/components/dashboard-sidebar";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
@@ -19,9 +18,9 @@ export default function DashboardLayout({
 }>) {
   return (
     <>
-      <DashboardSidebar>{children}</DashboardSidebar>
+      {/* <DashboardSidebar>{children}</DashboardSidebar> */}
       {/* <LandingPage></LandingPage> */}
-      {/* {children} */}
+      {children}
     </>
   );
 }
