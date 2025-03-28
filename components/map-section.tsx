@@ -1,43 +1,85 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { AlertTriangle, Hospital, MapPin, Navigation } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AlertTriangle, Hospital, MapPin, Navigation } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 // Mock data for emergency locations
 const emergencyLocations = [
-  { id: 1, name: "Central Hospital", type: "hospital", lat: 40.7128, lng: -74.006 },
-  { id: 2, name: "North Fire Station", type: "fire", lat: 40.7228, lng: -74.016 },
-  { id: 3, name: "East Police Station", type: "police", lat: 40.7148, lng: -73.996 },
-  { id: 4, name: "South Medical Center", type: "hospital", lat: 40.7028, lng: -74.006 },
-]
+  {
+    id: 1,
+    name: "Central Hospital",
+    type: "hospital",
+    lat: 40.7128,
+    lng: -74.006,
+  },
+  {
+    id: 2,
+    name: "North Fire Station",
+    type: "fire",
+    lat: 40.7228,
+    lng: -74.016,
+  },
+  {
+    id: 3,
+    name: "East Police Station",
+    type: "police",
+    lat: 40.7148,
+    lng: -73.996,
+  },
+  {
+    id: 4,
+    name: "South Medical Center",
+    type: "hospital",
+    lat: 40.7028,
+    lng: -74.006,
+  },
+];
 
 // Mock data for traffic incidents
 const trafficIncidents = [
-  { id: 1, description: "Major accident on Main St", severity: "high", lat: 40.7138, lng: -74.016 },
-  { id: 2, description: "Road construction on 5th Ave", severity: "medium", lat: 40.7228, lng: -74.026 },
-  { id: 3, description: "Traffic congestion on Broadway", severity: "low", lat: 40.7048, lng: -73.986 },
-]
+  {
+    id: 1,
+    description: "Major accident on Main St",
+    severity: "high",
+    lat: 40.7138,
+    lng: -74.016,
+  },
+  {
+    id: 2,
+    description: "Road construction on 5th Ave",
+    severity: "medium",
+    lat: 40.7228,
+    lng: -74.026,
+  },
+  {
+    id: 3,
+    description: "Traffic congestion on Broadway",
+    severity: "low",
+    lat: 40.7048,
+    lng: -73.986,
+  },
+];
 
 export function MapSection() {
-  const mapRef = useRef<HTMLDivElement>(null)
-  const [mapLoaded, setMapLoaded] = useState(false)
-  const [activeTab, setActiveTab] = useState("traffic")
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [activeTab, setActiveTab] = useState("traffic");
 
   useEffect(() => {
     // In a real implementation, you would load the Google Maps API here
     // and initialize the map with traffic layers, markers, etc.
     const loadMap = async () => {
       // Simulate loading the map
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      setMapLoaded(true)
-    }
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setMapLoaded(true);
+    };
 
-    loadMap()
-  }, [])
+    loadMap();
+  }, []);
 
   return (
     <div className="relative h-full">
@@ -55,14 +97,17 @@ export function MapSection() {
             <h4 className="font-medium mb-2">Traffic Incidents</h4>
             <div className="space-y-2 max-h-[200px] overflow-y-auto">
               {trafficIncidents.map((incident) => (
-                <div key={incident.id} className="flex items-start gap-2 text-sm">
+                <div
+                  key={incident.id}
+                  className="flex items-start gap-2 text-sm"
+                >
                   <AlertTriangle
                     className={`h-4 w-4 mt-0.5 ${
                       incident.severity === "high"
                         ? "text-red-500"
                         : incident.severity === "medium"
-                          ? "text-amber-500"
-                          : "text-blue-500"
+                        ? "text-amber-500"
+                        : "text-blue-500"
                     }`}
                   />
                   <div>
@@ -79,7 +124,10 @@ export function MapSection() {
             <h4 className="font-medium mb-2">Emergency Locations</h4>
             <div className="space-y-2 max-h-[200px] overflow-y-auto">
               {emergencyLocations.map((location) => (
-                <div key={location.id} className="flex items-start gap-2 text-sm">
+                <div
+                  key={location.id}
+                  className="flex items-start gap-2 text-sm"
+                >
                   {location.type === "hospital" ? (
                     <Hospital className="h-4 w-4 mt-0.5 text-red-500" />
                   ) : location.type === "fire" ? (
@@ -132,7 +180,11 @@ export function MapSection() {
                     top: `${Math.random() * 80 + 10}%`,
                     left: `${Math.random() * 80 + 10}%`,
                     backgroundColor:
-                      location.type === "hospital" ? "red" : location.type === "fire" ? "orange" : "blue",
+                      location.type === "hospital"
+                        ? "red"
+                        : location.type === "fire"
+                        ? "orange"
+                        : "blue",
                   }}
                 />
               ))}
@@ -146,7 +198,11 @@ export function MapSection() {
                     top: `${Math.random() * 80 + 10}%`,
                     left: `${Math.random() * 80 + 10}%`,
                     backgroundColor:
-                      incident.severity === "high" ? "red" : incident.severity === "medium" ? "orange" : "blue",
+                      incident.severity === "high"
+                        ? "red"
+                        : incident.severity === "medium"
+                        ? "orange"
+                        : "blue",
                   }}
                 />
               ))}
@@ -154,6 +210,5 @@ export function MapSection() {
         )}
       </div>
     </div>
-  )
+  );
 }
-
