@@ -1,10 +1,18 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { BarChart3, Home, Map, Settings, CloudSun, Bell, User2 } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -14,18 +22,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarTrigger,
   SidebarSeparator,
-} from "@/components/ui/sidebar"
-import { Badge } from "@/components/ui/badge"
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+  BarChart3,
+  Bell,
+  CloudSun,
+  Home,
+  Map,
+  Settings,
+  User2,
+} from "lucide-react";
+import Link from "next/link";
 
 export function DashboardSidebar({ children }: { children: React.ReactNode }) {
   return (
@@ -39,7 +48,9 @@ export function DashboardSidebar({ children }: { children: React.ReactNode }) {
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-bold">Smart City</span>
-                <span className="text-xs text-muted-foreground">Dashboard v0</span>
+                <span className="text-xs text-muted-foreground">
+                  Dashboard v0
+                </span>
               </div>
             </div>
           </SidebarHeader>
@@ -47,34 +58,34 @@ export function DashboardSidebar({ children }: { children: React.ReactNode }) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive>
-                  <a href="#">
+                  <Link href="#">
                     <Home className="h-4 w-4" />
                     <span>Dashboard</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#">
+                  <Link href="#">
                     <Map className="h-4 w-4" />
                     <span>City Map</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#">
+                  <Link href="#">
                     <CloudSun className="h-4 w-4" />
                     <span>Weather</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#">
+                  <Link href="#">
                     <Bell className="h-4 w-4" />
                     <span>Notifications</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
                 <Badge className="absolute right-1 top-1.5 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium">
                   3
@@ -87,10 +98,10 @@ export function DashboardSidebar({ children }: { children: React.ReactNode }) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#">
+                  <Link href="#">
                     <Settings className="h-4 w-4" />
                     <span>Settings</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -106,7 +117,9 @@ export function DashboardSidebar({ children }: { children: React.ReactNode }) {
                     </Avatar>
                     <div className="flex flex-col items-start text-sm">
                       <span className="font-medium">Admin User</span>
-                      <span className="text-xs text-muted-foreground">admin@smartcity.com</span>
+                      <span className="text-xs text-muted-foreground">
+                        admin@smartcity.com
+                      </span>
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
@@ -139,6 +152,5 @@ export function DashboardSidebar({ children }: { children: React.ReactNode }) {
         </div>
       </div>
     </SidebarProvider>
-  )
+  );
 }
-
