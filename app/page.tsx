@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import {
   BarChart3,
   Cloud,
@@ -52,6 +53,13 @@ export default function LandingPage() {
               <BarChart3 className="h-4 w-4" />
               Dashboard
             </Link>
+
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            <SignedOut>
+              <Link href="/sign-in">Sign in</Link>
+            </SignedOut>
           </nav>
         </div>
       </header>

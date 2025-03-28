@@ -1,7 +1,6 @@
 "use client";
 
 import { MapSection } from "@/components/map-section";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { WeatherSection } from "@/components/weather-section";
-import { RefreshCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
@@ -36,7 +34,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-6 p-2">
+      {/* <div className="flex items-center justify-between mb-6 p-2">
         <h1 className="text-2xl font-bold">Overview</h1>
         <div className="flex items-center gap-4">
           <div className="text-sm text-muted-foreground">
@@ -49,7 +47,7 @@ export default function Dashboard() {
             Refresh
           </Button>
         </div>
-      </div>
+      </div> */}
 
       <div className="container py-6">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">

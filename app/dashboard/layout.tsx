@@ -1,6 +1,4 @@
 import { DashboardSidebar } from "@/components/dashboard-sidebar";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
@@ -20,23 +18,10 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem
-      disableTransitionOnChange
-    >
-      {" "}
-      <ClerkProvider>
-        <html lang="en" suppressHydrationWarning>
-          <body className={`${geistSans.className} antialiased w-full h-full`}>
-            {/* <AppBar /> */}
-            <DashboardSidebar>{children}</DashboardSidebar>
-            {/* <LandingPage></LandingPage> */}
-            {/* {children} */}
-          </body>
-        </html>
-      </ClerkProvider>
-    </ThemeProvider>
+    <>
+      <DashboardSidebar>{children}</DashboardSidebar>
+      {/* <LandingPage></LandingPage> */}
+      {/* {children} */}
+    </>
   );
 }

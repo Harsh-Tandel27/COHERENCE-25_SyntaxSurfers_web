@@ -7,17 +7,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Cloud,
-  CloudRain,
-  Droplets,
-  Sun,
-  Thermometer,
-  Wind,
-} from "lucide-react";
+import { Cloud, CloudRain, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+
+const COLORS = [
+  "#0088FE",
+  "#00C49F",
+  "#FFBB28",
+  "#FF8042",
+  "#A28DFF",
+  "#FF6384",
+];
 
 interface WeatherData {
   temperature: number;
@@ -26,6 +35,7 @@ interface WeatherData {
   windSpeed: number;
   airQuality: number;
   condition: string;
+  airMetrics: { name: string; value: number }[];
   forecast: {
     day: string;
     temperature: number;
@@ -36,41 +46,57 @@ interface WeatherData {
 export function WeatherSection() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const API_KEY = process.env.NEXT_PUBLIC_OW_API_KEY;
 
   useEffect(() => {
-    // In a real implementation, you would fetch data from the OpenWeather API
     const fetchWeatherData = async () => {
       setLoading(true);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setError(null);
+      try {
+        const response = await fetch(
+          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=Palghar&days=5&aqi=yes`
+        );
+        const data = await response.json();
 
-      // Mock data
-      setWeatherData({
-        temperature: 22,
-        feelsLike: 24,
-        humidity: 65,
-        windSpeed: 12,
-        airQuality: 42,
-        condition: "Partly Cloudy",
-        forecast: [
-          { day: "Mon", temperature: 22, condition: "cloudy" },
-          { day: "Tue", temperature: 25, condition: "sunny" },
-          { day: "Wed", temperature: 20, condition: "rainy" },
-          { day: "Thu", temperature: 18, condition: "rainy" },
-          { day: "Fri", temperature: 23, condition: "cloudy" },
-        ],
-      });
+        if (data.error) {
+          throw new Error(data.error.message);
+        }
+
+        console.log("Weather API Response:", data);
+
+        setWeatherData({
+          temperature: data.current?.temp_c ?? 0,
+          feelsLike: data.current?.feelslike_c ?? 0,
+          humidity: data.current?.humidity ?? 0,
+          windSpeed: data.current?.wind_kph ?? 0,
+          airQuality: data.current?.air_quality?.["us-epa-index"] ?? 50,
+          condition: data.current?.condition?.text || "Unknown",
+          airMetrics: [
+            { name: "CO", value: data.current?.air_quality?.co ?? 0 },
+            { name: "NO₂", value: data.current?.air_quality?.no2 ?? 0 },
+            { name: "O₃", value: data.current?.air_quality?.o3 ?? 0 },
+            { name: "SO₂", value: data.current?.air_quality?.so2 ?? 0 },
+            { name: "PM2.5", value: data.current?.air_quality?.pm2_5 ?? 0 },
+            { name: "PM10", value: data.current?.air_quality?.pm10 ?? 0 },
+          ],
+          forecast:
+            data.forecast?.forecastday?.map((day: any) => ({
+              day: new Date(day.date).toLocaleDateString("en-US", {
+                weekday: "short",
+              }),
+              temperature: day.day?.avgtemp_c ?? 0,
+              condition: day.day?.condition?.text || "Unknown",
+            })) || [],
+        });
+      } catch (error: any) {
+        console.error("Error fetching weather data:", error);
+        setError(error.message);
+      }
       setLoading(false);
     };
 
     fetchWeatherData();
-
-    // Set up polling for real-time updates
-    const interval = setInterval(() => {
-      fetchWeatherData();
-    }, 300000); // Update every 5 minutes
-
-    return () => clearInterval(interval);
   }, []);
 
   const getAirQualityLabel = (aqi: number) => {
@@ -82,31 +108,26 @@ export function WeatherSection() {
     return "Hazardous";
   };
 
-  const getAirQualityColor = (aqi: number) => {
-    if (aqi <= 50) return "bg-green-500";
-    if (aqi <= 100) return "bg-yellow-500";
-    if (aqi <= 150) return "bg-orange-500";
-    if (aqi <= 200) return "bg-red-500";
-    if (aqi <= 300) return "bg-purple-500";
-    return "bg-rose-900";
-  };
-
   const getWeatherIcon = (condition: string) => {
-    switch (condition.toLowerCase()) {
-      case "sunny":
-        return <Sun className="h-5 w-5 text-amber-500" />;
-      case "cloudy":
-        return <Cloud className="h-5 w-5 text-gray-500" />;
-      case "rainy":
-        return <CloudRain className="h-5 w-5 text-blue-500" />;
-      default:
-        return <Cloud className="h-5 w-5 text-gray-500" />;
-    }
+    if (condition.toLowerCase().includes("sun"))
+      return <Sun className="h-5 w-5 text-amber-500" />;
+    if (condition.toLowerCase().includes("cloud"))
+      return <Cloud className="h-5 w-5 text-gray-500" />;
+    if (condition.toLowerCase().includes("rain"))
+      return <CloudRain className="h-5 w-5 text-blue-500" />;
+    return <Cloud className="h-5 w-5 text-gray-500" />;
   };
+  const airQualityData = weatherData
+    ? Object.entries(weatherData.airQuality).map(([key, value], index) => ({
+        name: key.toUpperCase(),
+        value,
+        color: COLORS[index % COLORS.length],
+      }))
+    : [];
 
   return (
     <>
-      <Card>
+      <Card className="shadow-lg">
         <CardHeader>
           <CardTitle>Weather Conditions</CardTitle>
           <CardDescription>
@@ -115,13 +136,7 @@ export function WeatherSection() {
         </CardHeader>
         <CardContent>
           {loading || !weatherData ? (
-            <div className="space-y-4">
-              <Skeleton className="h-[180px] w-full" />
-              <div className="grid grid-cols-2 gap-4">
-                <Skeleton className="h-[100px] w-full" />
-                <Skeleton className="h-[100px] w-full" />
-              </div>
-            </div>
+            <Skeleton className="h-[180px] w-full" />
           ) : (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
@@ -136,90 +151,43 @@ export function WeatherSection() {
                     {weatherData.condition}
                   </div>
                 </div>
-                <div className="text-6xl">
-                  {weatherData.condition.toLowerCase().includes("cloud") ? (
-                    <Cloud className="h-20 w-20 text-gray-400" />
-                  ) : weatherData.condition.toLowerCase().includes("rain") ? (
-                    <CloudRain className="h-20 w-20 text-blue-400" />
-                  ) : (
-                    <Sun className="h-20 w-20 text-amber-400" />
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-2 rounded-lg border p-3">
-                  <div className="flex items-center gap-2">
-                    <Droplets className="h-4 w-4 text-blue-500" />
-                    <span className="text-sm font-medium">Humidity</span>
-                  </div>
-                  <div className="text-2xl font-bold">
-                    {weatherData.humidity}%
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2 rounded-lg border p-3">
-                  <div className="flex items-center gap-2">
-                    <Wind className="h-4 w-4 text-gray-500" />
-                    <span className="text-sm font-medium">Wind</span>
-                  </div>
-                  <div className="text-2xl font-bold">
-                    {weatherData.windSpeed} km/h
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Thermometer className="h-4 w-4 text-red-500" />
-                    <span className="text-sm font-medium">
-                      Air Quality Index
-                    </span>
-                  </div>
-                  <span className="text-sm font-medium">
-                    {getAirQualityLabel(weatherData.airQuality)}
-                  </span>
-                </div>
-                <Progress value={weatherData.airQuality / 3} className="h-2" />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Good</span>
-                  <span>Moderate</span>
-                  <span>Unhealthy</span>
-                </div>
+                <Sun className="h-20 w-20 text-amber-400" />
               </div>
             </div>
           )}
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="shadow-lg mt-6">
         <CardHeader>
-          <CardTitle>5-Day Forecast</CardTitle>
+          <CardTitle>Air Quality</CardTitle>
         </CardHeader>
         <CardContent>
           {loading || !weatherData ? (
-            <div className="grid grid-cols-5 gap-2">
-              {Array(5)
-                .fill(0)
-                .map((_, i) => (
-                  <Skeleton key={i} className="h-[100px] w-full" />
-                ))}
-            </div>
+            <Skeleton className="h-[200px] w-full" />
           ) : (
-            <div className="grid grid-cols-5 gap-2">
-              {weatherData.forecast.map((day, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-center justify-center rounded-lg border p-2 text-center"
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={weatherData.airMetrics}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label
                 >
-                  <div className="text-sm font-medium">{day.day}</div>
-                  {getWeatherIcon(day.condition)}
-                  <div className="mt-1 text-lg font-bold">
-                    {day.temperature}°
-                  </div>
-                </div>
-              ))}
-            </div>
+                  {weatherData.airMetrics.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Legend />
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
           )}
         </CardContent>
       </Card>

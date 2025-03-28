@@ -5,7 +5,6 @@ import type React from "react";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -14,11 +13,19 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, useAuth, UserButton } from "@clerk/nextjs";
 import { BarChart3, Home, LayoutDashboardIcon, Settings } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function DashboardSidebar({ children }: { children: React.ReactNode }) {
+  const { isSignedIn } = useAuth();
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   if (!isSignedIn) return router.replace("/sign-in");
+  // }, []);
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen">
@@ -69,20 +76,23 @@ export function DashboardSidebar({ children }: { children: React.ReactNode }) {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarContent>
-          <SidebarFooter>
+          {/* <SidebarFooter>
             <div className="p-2">
               <SignedIn>
                 <UserButton />
               </SignedIn>
             </div>
-          </SidebarFooter>
+          </SidebarFooter> */}
         </Sidebar>
         <div className="flex flex-1 flex-col">
-          <div className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+          <div className="sticky bg-white top-0 z-10 flex h-16 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
             <SidebarTrigger />
             <div className="text-lg font-semibold">Smart City Dashboard</div>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </div>
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 p-4 w-full">{children}</main>
         </div>
       </div>
     </SidebarProvider>
