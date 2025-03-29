@@ -1,8 +1,8 @@
-import AnalyticsChart from "@/components/analytics-chart";
-import CityAnalytics from "@/components/city-analytics";
-import DashboardStats from "@/components/dashboard-stats";
-import { Card } from "@/components/ui/card";
-import WeatherOverview from "@/components/weather-overview";
+import AnalyticsChart from "@/components/analytics-chart"
+import CityAnalytics from "@/components/city-analytics"
+import DashboardStats from "@/components/dashboard-stats"
+import { Card } from "@/components/ui/card"
+import WeatherOverview from "@/components/weather-overview"
 
 export default function Home() {
   return (
@@ -24,5 +24,6 @@ export default function Home() {
         <AnalyticsChart />
       </Card>
     </main>
-  );
+  )
 }
+

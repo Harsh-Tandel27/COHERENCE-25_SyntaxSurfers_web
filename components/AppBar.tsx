@@ -1,7 +1,7 @@
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { BarChart3 } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
+import { BarChart3 } from "lucide-react"
+import Link from "next/link"
+import type React from "react"
 
 const AppBar: React.FC<{}> = () => {
   return (
@@ -21,7 +21,8 @@ const AppBar: React.FC<{}> = () => {
         <UserButton />
       </SignedIn>
     </header>
-  );
-};
+  )
+}
 
-export default AppBar;
+export default AppBar
+

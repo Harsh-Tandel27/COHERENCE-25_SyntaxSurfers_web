@@ -1,6 +1,4 @@
 "use client"
-
-import { Card } from "@/components/ui/card"
 import { Cloud, Sun, CloudRain } from "lucide-react"
 
 const transactions = [
@@ -44,26 +42,19 @@ export default function TransactionList() {
       </div>
       <div className="space-y-4">
         {transactions.map((transaction) => (
-          <div
-            key={transaction.id}
-            className="flex items-center justify-between p-4 rounded-lg border"
-          >
+          <div key={transaction.id} className="flex items-center justify-between p-4 rounded-lg border">
             <div className="flex items-center space-x-4">
               <div className={`p-2 rounded-full ${transaction.bgColor}`}>
                 <transaction.icon className={`h-5 w-5 ${transaction.iconColor}`} />
               </div>
               <div>
                 <p className="font-medium">{transaction.title}</p>
-                <p className="text-sm text-muted-foreground">
-                  {transaction.time}
-                </p>
+                <p className="text-sm text-muted-foreground">{transaction.time}</p>
               </div>
             </div>
             <div className="text-right">
               <p className="font-medium">{transaction.amount}</p>
-              <p className="text-sm text-muted-foreground">
-                {transaction.date}
-              </p>
+              <p className="text-sm text-muted-foreground">{transaction.date}</p>
             </div>
           </div>
         ))}
@@ -71,3 +62,4 @@ export default function TransactionList() {
     </div>
   )
 }
+

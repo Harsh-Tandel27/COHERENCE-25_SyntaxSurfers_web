@@ -2,23 +2,23 @@
 
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { Cloud, Droplets, Wind, Thermometer, Sun, CloudRain } from "lucide-react"
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { Thermometer, Sun, CloudRain } from "lucide-react"
 
 const weatherData = [
-  { day: 'Mon', temp: 22, humidity: 65, wind: 12 },
-  { day: 'Tue', temp: 24, humidity: 62, wind: 10 },
-  { day: 'Wed', temp: 21, humidity: 68, wind: 14 },
-  { day: 'Thu', temp: 25, humidity: 60, wind: 8 },
-  { day: 'Fri', temp: 23, humidity: 63, wind: 11 },
+  { day: "Mon", temp: 22, humidity: 65, wind: 12 },
+  { day: "Tue", temp: 24, humidity: 62, wind: 10 },
+  { day: "Wed", temp: 21, humidity: 68, wind: 14 },
+  { day: "Thu", temp: 25, humidity: 60, wind: 8 },
+  { day: "Fri", temp: 23, humidity: 63, wind: 11 },
 ]
 
 const pollutionData = [
-  { time: '6am', pm25: 35, pm10: 45, no2: 25 },
-  { time: '9am', pm25: 42, pm10: 55, no2: 30 },
-  { time: '12pm', pm25: 38, pm10: 50, no2: 28 },
-  { time: '3pm', pm25: 40, pm10: 52, no2: 32 },
-  { time: '6pm', pm25: 36, pm10: 48, no2: 27 },
+  { time: "6am", pm25: 35, pm10: 45, no2: 25 },
+  { time: "9am", pm25: 42, pm10: 55, no2: 30 },
+  { time: "12pm", pm25: 38, pm10: 50, no2: 28 },
+  { time: "3pm", pm25: 40, pm10: 52, no2: 32 },
+  { time: "6pm", pm25: 36, pm10: 48, no2: 27 },
 ]
 
 export default function DetailedCityAnalytics({ city }: { city: string }) {
@@ -66,10 +66,10 @@ export default function DetailedCityAnalytics({ city }: { city: string }) {
                   <XAxis dataKey="day" />
                   <YAxis />
                   <Tooltip />
-                  <Line 
-                    type="monotone" 
-                    dataKey="temp" 
-                    stroke="hsl(var(--primary))" 
+                  <Line
+                    type="monotone"
+                    dataKey="temp"
+                    stroke="hsl(var(--chart-1))"
                     name="Temperature (°C)"
                     strokeWidth={2}
                   />
@@ -100,3 +100,4 @@ export default function DetailedCityAnalytics({ city }: { city: string }) {
     </div>
   )
 }
+

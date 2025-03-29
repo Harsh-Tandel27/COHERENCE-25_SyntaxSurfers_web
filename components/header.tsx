@@ -1,5 +1,7 @@
 "use client";
 
+import type React from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,7 +11,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { BarChart3, Home, Menu, Moon, Search, Sun } from "lucide-react";
+import {
+  BarChart3,
+  Home,
+  LightbulbIcon,
+  Map,
+  Menu,
+  Moon,
+  Search,
+  Sun,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -50,7 +61,7 @@ export default function Header() {
         <nav className="hidden md:flex items-center justify-center gap-6">
           <Link
             href="/"
-            className="text-sm font-medium flex items-center gap-1 text-primary"
+            className="text-sm font-medium flex items-center gap-1 transition-colors hover:text-primary"
           >
             <Home className="h-4 w-4" />
             Home
@@ -61,6 +72,20 @@ export default function Header() {
           >
             <BarChart3 className="h-4 w-4" />
             Dashboard
+          </Link>
+          <Link
+            href="/traffic"
+            className="text-sm font-medium flex items-center gap-1 transition-colors hover:text-primary"
+          >
+            <Map className="h-4 w-4" />
+            Traffic
+          </Link>
+          <Link
+            href="/energy"
+            className="text-sm font-medium flex items-center gap-1 transition-colors hover:text-primary"
+          >
+            <LightbulbIcon className="h-4 w-4" />
+            Energy
           </Link>
 
           <SignedIn>

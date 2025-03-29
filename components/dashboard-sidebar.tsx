@@ -1,15 +1,10 @@
+import type React from "react"
 // "use client";
 
-import AppBar from "./AppBar";
-import { MapSection } from "./map-section";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { WeatherSection } from "./weather-section";
+import AppBar from "./AppBar"
+import { MapSection } from "./map-section"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
+import { WeatherSection } from "./weather-section"
 
 // import type React from "react";
 
@@ -148,9 +143,7 @@ export function DashboardSidebar({ children }: { children: React.ReactNode }) {
           <Card className="md:col-span-2 lg:col-span-5 border-none">
             <CardHeader>
               <CardTitle>City Map</CardTitle>
-              <CardDescription>
-                Real-time traffic data and emergency routes
-              </CardDescription>
+              <CardDescription>Real-time traffic data and emergency routes</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
               <div className="h-[500px] rounded-b-lg overflow-hidden">
@@ -164,5 +157,6 @@ export function DashboardSidebar({ children }: { children: React.ReactNode }) {
         </div>
       </main>
     </div>
-  );
+  )
 }
+

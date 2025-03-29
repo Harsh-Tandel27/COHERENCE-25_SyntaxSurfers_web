@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation"
-import { Card } from "@/components/ui/card"
 import CityNotFound from "@/components/city-not-found"
 import DetailedCityAnalytics from "@/components/detailed-city-analytics"
 
@@ -33,3 +32,4 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
     </main>
   )
 }
+

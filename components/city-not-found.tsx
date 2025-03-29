@@ -30,3 +30,4 @@ export default function CityNotFound({ query }: { query: string }) {
     </main>
   )
 }
+

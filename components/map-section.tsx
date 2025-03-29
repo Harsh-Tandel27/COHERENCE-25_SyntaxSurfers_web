@@ -1,39 +1,36 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { useGeoLocation } from "@/hooks/useGeoLoc";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { Navigation } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button"
+import { useGeoLocation } from "@/hooks/useGeoLoc"
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api"
+import { Navigation } from "lucide-react"
+import { useEffect, useState } from "react"
 
 // Load API key from environment variables
-const GOOGLE_MAPS_API_KEY = process.env
-  .NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
 
-const mapContainerStyle = { width: "100%", height: "100vh" };
+const mapContainerStyle = { width: "100%", height: "100vh" }
 
 export function MapSection() {
-  const [activeTab, setActiveTab] = useState("traffic");
-  const { location } = useGeoLocation();
+  const [activeTab, setActiveTab] = useState("traffic")
+  const { location } = useGeoLocation()
   const [currentLocation, setCurrentLocation] = useState({
     lat: 19.3835727,
     lng: 72.8294563,
-  });
+  })
   const [markerIcons, setMarkerIcons] = useState<{
-    [key: string]: google.maps.Icon;
-  }>({});
-  const [geoPermission, setGeoPermission] = useState<
-    "granted" | "denied" | "prompt"
-  >("prompt");
+    [key: string]: google.maps.Icon
+  }>({})
+  const [geoPermission, setGeoPermission] = useState<"granted" | "denied" | "prompt">("prompt")
 
   useEffect(() => {
     if (navigator.permissions) {
       navigator.permissions.query({ name: "geolocation" }).then((result) => {
-        setGeoPermission(result.state);
-        result.onchange = () => setGeoPermission(result.state);
-      });
+        setGeoPermission(result.state)
+        result.onchange = () => setGeoPermission(result.state)
+      })
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (geoPermission === "granted" && navigator.geolocation) {
@@ -42,16 +39,16 @@ export function MapSection() {
           setCurrentLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-          });
+          })
         },
         (error) => {
-          console.error("Geolocation error:", error);
-        }
-      );
+          console.error("Geolocation error:", error)
+        },
+      )
     } else if (geoPermission === "denied") {
-      console.error("Geolocation permission denied.");
+      console.error("Geolocation permission denied.")
     }
-  }, [geoPermission]);
+  }, [geoPermission])
 
   // Load marker icons once Google Maps is available
   useEffect(() => {
@@ -85,26 +82,19 @@ export function MapSection() {
           url: "/current-location.png",
           scaledSize: new window.google.maps.Size(40, 40),
         },
-      });
+      })
     }
-  }, []);
+  }, [])
 
   return (
     <div className="relative h-full">
       <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
         {geoPermission === "denied" ? (
           <div className="flex items-center justify-center h-full">
-            <p>
-              Geolocation permission is denied. Please enable it in your browser
-              settings.
-            </p>
+            <p>Geolocation permission is denied. Please enable it in your browser settings.</p>
           </div>
         ) : currentLocation ? (
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            center={currentLocation}
-            zoom={12}
-          >
+          <GoogleMap mapContainerStyle={mapContainerStyle} center={currentLocation} zoom={12}>
             {/* User's Current Location Marker */}
             <Marker position={currentLocation} icon={markerIcons["user"]} />
           </GoogleMap>
@@ -126,5 +116,6 @@ export function MapSection() {
         </Button>
       </div>
     </div>
-  );
+  )
 }
+

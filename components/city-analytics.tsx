@@ -1,15 +1,13 @@
 "use client"
-
-import { Card } from "@/components/ui/card"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
 const data = [
-  { name: 'Jan', value: 65 },
-  { name: 'Feb', value: 59 },
-  { name: 'Mar', value: 80 },
-  { name: 'Apr', value: 81 },
-  { name: 'May', value: 56 },
-  { name: 'Jun', value: 55 },
+  { name: "Jan", value: 65 },
+  { name: "Feb", value: 59 },
+  { name: "Mar", value: 80 },
+  { name: "Apr", value: 81 },
+  { name: "May", value: 56 },
+  { name: "Jun", value: 55 },
 ]
 
 export default function CityAnalytics() {
@@ -23,15 +21,11 @@ export default function CityAnalytics() {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Line 
-              type="monotone" 
-              dataKey="value" 
-              stroke="hsl(var(--primary))"
-              strokeWidth={2}
-            />
+            <Line type="monotone" dataKey="value" stroke="hsl(var(--chart-1))" strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
       </div>
     </div>
   )
 }
+
