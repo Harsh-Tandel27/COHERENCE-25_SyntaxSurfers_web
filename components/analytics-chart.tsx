@@ -1,56 +1,96 @@
-"use client"
+"use client";
 
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { useEffect, useState } from "react";
+import {
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
-const COLORS = ["#FF5733", "#4287f5", "#2ECC71", "#FFC300", "#9B59B6"]
+const COLORS = ["#FF5733", "#4287f5"];
+const API_KEY = process.env.NEXT_PUBLIC_OW_API_KEY;
+const CITY = "Palghar"; // You can change this dynamically
 
-const data = [
-  { year: "2015", temperature: 80, humidity: 65 },
-  { year: "2016", temperature: 45, humidity: 70 },
-  { year: "2017", temperature: 40, humidity: 20 },
-  { year: "2018", temperature: 30, humidity: 50 },
-  { year: "2019", temperature: 55, humidity: 35 },
-  { year: "2020", temperature: 85, humidity: 75 },
-]
-
-export default function AnalyticsChart() {
-  return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Weather Trends</h2>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[hsl(var(--chart-1))]" />
-            <span className="text-sm text-muted-foreground">Temperature</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[hsl(var(--chart-2))]" />
-            <span className="text-sm text-muted-foreground">Humidity</span>
-          </div>
-        </div>
-      </div>
-      <div className="h-[300px]">
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-            <XAxis dataKey="timestamp" stroke="#888" />
-            <YAxis stroke="#888" />
-            <Tooltip />
-            {data.length > 0 &&
-              Object.keys(data[0])
-                .filter((key) => key !== "timestamp")
-                .map((key, index) => (
-                  <Line
-                    key={key}
-                    type="monotone"
-                    dataKey={key}
-                    stroke={COLORS[index % COLORS.length]}
-                    strokeWidth={2}
-                  />
-                ))}
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  )
+interface WeatherData {
+  date: string;
+  temperature: number;
+  humidity: number;
 }
 
+export default function AnalyticsChart() {
+  const [data, setData] = useState<WeatherData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          `https://api.weatherapi.com/v1/history.json?key=${API_KEY}&q=${CITY}&dt=2024-03-20`
+        );
+        const result = await response.json();
+
+        if (result.error) throw new Error(result.error.message);
+
+        const formattedData = result.forecast.forecastday[0].hour.map(
+          (hour: any) => ({
+            date: hour.time.split(" ")[1], // Extracting just the time part
+            temperature: hour.temp_c,
+            humidity: hour.humidity,
+          })
+        );
+
+        setData(formattedData);
+      } catch (error: any) {
+        setError(error.message);
+      }
+      setLoading(false);
+    };
+
+    fetchWeatherData();
+  }, []);
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-2xl font-bold">Weather Trends (Last 24 Hours)</h2>
+
+      {loading ? (
+        <p>Loading data...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : (
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart
+              data={data}
+              margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+            >
+              <XAxis dataKey="date" stroke="#888" />
+              <YAxis stroke="#888" />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="temperature"
+                stroke={COLORS[0]}
+                strokeWidth={2}
+              />
+              <Line
+                type="monotone"
+                dataKey="humidity"
+                stroke={COLORS[1]}
+                strokeWidth={2}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </div>
+  );
+}

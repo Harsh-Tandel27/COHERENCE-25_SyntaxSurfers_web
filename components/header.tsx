@@ -9,7 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import {
   BarChart3,
@@ -87,6 +86,13 @@ export default function Header() {
             <LightbulbIcon className="h-4 w-4" />
             Energy
           </Link>
+          <Link
+            href="/water-level"
+            className="text-sm font-medium flex items-center gap-1 transition-colors hover:text-primary"
+          >
+            <LightbulbIcon className="h-4 w-4" />
+            Water Level
+          </Link>
 
           <SignedIn>
             <UserButton />
@@ -96,7 +102,7 @@ export default function Header() {
           </SignedOut>
         </nav>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <form
+          {/* <form
             onSubmit={handleSearch}
             className={`flex-1 md:flex-initial ${
               isSearchOpen ? "block" : "hidden md:block"
@@ -109,7 +115,7 @@ export default function Header() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </form>
+          </form> */}
 
           <Button
             variant="ghost"
