@@ -7,7 +7,7 @@ import { get, getDatabase, ref } from "firebase/database";
 import { Bell } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function AlertsDashboard() {
+export default function WeatherAlert() {
   const [alerts, setAlerts] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 

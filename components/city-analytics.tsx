@@ -16,7 +16,7 @@ const COLORS = ["#FF5733", "#4287f5", "#2ECC71", "#FFC300", "#9B59B6"]; // Defin
 
 const API_KEY = process.env.NEXT_PUBLIC_OW_API_KEY;
 
-export default function CityAnalytics() {
+export default function CityAnalytics({ city }: { city: string | null }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { place } = useUser();
@@ -25,7 +25,9 @@ export default function CityAnalytics() {
     const fetchAirQualityData = async () => {
       try {
         const response = await fetch(
-          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${place}&days=7&aqi=yes`
+          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${
+            city || place
+          }&days=7&aqi=yes`
         );
         const result = await response.json();
 
@@ -53,11 +55,13 @@ export default function CityAnalytics() {
     };
 
     fetchAirQualityData();
-  }, []);
+  }, [city]);
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Air Quality Index (PM2.5)</h2>
+      <h2 className="text-2xl font-bold">
+        Air Quality Index (PM2.5) : {city || place}
+      </h2>
       <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           {loading ? (

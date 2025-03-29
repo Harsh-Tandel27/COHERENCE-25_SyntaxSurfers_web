@@ -12,7 +12,7 @@ interface WeatherData {
   windSpeed: number;
 }
 
-export default function DashboardStats() {
+export default function DashboardStats({ city }: { city: string | null }) {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,9 +25,12 @@ export default function DashboardStats() {
       setError(null);
       try {
         const response = await fetch(
-          `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${place}&aqi=no`
+          `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${
+            city || place
+          }&aqi=no`
         );
         const data = await response.json();
+        console.log("hh", data);
 
         if (data.error) {
           throw new Error(data.error.message);
@@ -46,7 +49,7 @@ export default function DashboardStats() {
     };
 
     fetchWeatherData();
-  }, []);
+  }, [city]);
 
   const stats = [
     {

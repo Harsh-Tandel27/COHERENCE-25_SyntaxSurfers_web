@@ -21,7 +21,7 @@ interface ForecastData {
   humidity: number;
 }
 
-export default function ForecastChart() {
+export default function ForecastChart({ city }: { city: string | null }) {
   const [data, setData] = useState<ForecastData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +33,9 @@ export default function ForecastChart() {
       setError(null);
       try {
         const response = await fetch(
-          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${place}&days=7&aqi=no`
+          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${
+            city || place
+          }&days=7&aqi=no`
         );
         const result = await response.json();
 
@@ -56,11 +58,13 @@ export default function ForecastChart() {
     };
 
     fetchForecastData();
-  }, []);
+  }, [city]);
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">7-Day Weather Forecast</h2>
+      <h2 className="text-2xl font-bold">
+        7-Day Weather Forecast : {city || place}
+      </h2>
 
       {loading ? (
         <p>Loading forecast data...</p>

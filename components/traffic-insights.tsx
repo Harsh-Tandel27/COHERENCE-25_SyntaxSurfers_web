@@ -150,8 +150,8 @@ export default function TrafficInsights({ location }: TrafficInsightsProps) {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-12 gap-x-5">
-        <div className="col-span-3 flex gap-y-5 flex-col">
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-12 md:col-span-3 flex gap-y-5 md:flex-col gap-x-5">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
@@ -204,7 +204,7 @@ export default function TrafficInsights({ location }: TrafficInsightsProps) {
             </CardContent>
           </Card>
         </div>
-        <div className="col-span-9">
+        <div className="md:col-span-9 col-span-12">
           <Card>
             <CardHeader>
               <CardTitle>Hourly Traffic Congestion</CardTitle>
