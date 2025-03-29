@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@/context/UserContext";
 import { useEffect, useState } from "react";
 import {
   Legend,
@@ -13,38 +14,39 @@ import {
 
 const COLORS = ["#FF5733", "#4287f5"];
 const API_KEY = process.env.NEXT_PUBLIC_OW_API_KEY;
-const CITY = "Palghar"; // You can change this dynamically
 
-interface WeatherData {
+interface ForecastData {
   date: string;
   temperature: number;
   humidity: number;
 }
 
-export default function AnalyticsChart() {
-  const [data, setData] = useState<WeatherData[]>([]);
+export default function ForecastChart() {
+  const [data, setData] = useState<ForecastData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { place } = useUser();
 
   useEffect(() => {
-    const fetchWeatherData = async () => {
+    const fetchForecastData = async () => {
       setLoading(true);
       setError(null);
       try {
         const response = await fetch(
-          `https://api.weatherapi.com/v1/history.json?key=${API_KEY}&q=${CITY}&dt=2024-03-20`
+          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${place}&days=7&aqi=no`
         );
         const result = await response.json();
 
         if (result.error) throw new Error(result.error.message);
 
-        const formattedData = result.forecast.forecastday[0].hour.map(
-          (hour: any) => ({
-            date: hour.time.split(" ")[1], // Extracting just the time part
-            temperature: hour.temp_c,
-            humidity: hour.humidity,
-          })
-        );
+        // Extracting forecast data for the next 7 days
+        const formattedData = result.forecast.forecastday.map((day: any) => ({
+          date: new Date(day.date).toLocaleDateString("en-US", {
+            weekday: "short", // "Mon", "Tue", etc.
+          }),
+          temperature: day.day.avgtemp_c,
+          humidity: day.day.avghumidity,
+        }));
 
         setData(formattedData);
       } catch (error: any) {
@@ -53,15 +55,15 @@ export default function AnalyticsChart() {
       setLoading(false);
     };
 
-    fetchWeatherData();
+    fetchForecastData();
   }, []);
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Weather Trends (Last 24 Hours)</h2>
+      <h2 className="text-2xl font-bold">7-Day Weather Forecast</h2>
 
       {loading ? (
-        <p>Loading data...</p>
+        <p>Loading forecast data...</p>
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (

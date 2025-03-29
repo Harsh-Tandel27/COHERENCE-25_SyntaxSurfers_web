@@ -37,8 +37,7 @@ export default function RootLayout({
             {/* <DashboardSidebar>{children}</DashboardSidebar> */}
             {/* <LandingPage></LandingPage> */}
             <Header />
-
-            {children}
+            <UserProvider>{children}</UserProvider>
           </ClerkProvider>
         </ThemeProvider>
       </body>
@@ -48,4 +47,5 @@ export default function RootLayout({
 
 import "./globals.css";
 
+import { UserProvider } from "@/context/UserContext";
 import "./globals.css";

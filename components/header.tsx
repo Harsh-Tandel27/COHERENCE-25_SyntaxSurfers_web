@@ -10,16 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import {
-  BarChart3,
-  Home,
-  LightbulbIcon,
-  Map,
-  Menu,
-  Moon,
-  Search,
-  Sun,
-} from "lucide-react";
+import { BarChart3, Home, LightbulbIcon, Map, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -40,24 +31,16 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-4 flex">
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-5 w-5" />
-          </Button>
-          <a href="/" className="mr-6 flex items-center space-x-2">
-            <span className="hidden font-bold sm:inline-block">
-              Smart City Dashboard
-            </span>
-          </a>
-        </div>
+      <div className="px-6 flex h-14 items-center justify-between">
+        {/* Logo */}
+        <a href="/" className="flex items-center space-x-2">
+          <span className="hidden font-bold sm:inline-block">
+            YourSmartCity
+          </span>
+        </a>
 
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Menu className="h-6 w-6" />
-        </Button>
-
-        {/* Desktop navigation */}
-        <nav className="hidden md:flex items-center justify-center gap-6">
+        {/* Centered Navigation */}
+        <nav className="hidden md:flex items-center justify-center gap-6 flex-1">
           <Link
             href="/"
             className="text-sm font-medium flex items-center gap-1 transition-colors hover:text-primary"
@@ -93,38 +76,18 @@ export default function Header() {
             <LightbulbIcon className="h-4 w-4" />
             Water Level
           </Link>
+        </nav>
 
+        {/* Right Side: User & Theme Toggle */}
+        <div className="flex items-center gap-4">
           <SignedIn>
             <UserButton />
           </SignedIn>
           <SignedOut>
-            <Link href="/sign-in">Sign in</Link>
+            <Link href="/sign-in" className="text-sm font-medium">
+              Sign in
+            </Link>
           </SignedOut>
-        </nav>
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          {/* <form
-            onSubmit={handleSearch}
-            className={`flex-1 md:flex-initial ${
-              isSearchOpen ? "block" : "hidden md:block"
-            }`}
-          >
-            <Input
-              type="search"
-              placeholder="Search cities..."
-              className="h-9 md:w-[300px] lg:w-[400px]"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </form> */}
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsSearchOpen(!isSearchOpen)}
-          >
-            <Search className="h-5 w-5" />
-          </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

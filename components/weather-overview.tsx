@@ -38,7 +38,7 @@ export default function AlertsDashboard() {
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold flex items-center">
-        <Bell className="h-6 w-6 mr-2 text-red-500" /> Alerts
+        <Bell className="h-6 w-6 mr-2 text-red-500" /> Weather Alerts
       </h2>
 
       {loading ? (

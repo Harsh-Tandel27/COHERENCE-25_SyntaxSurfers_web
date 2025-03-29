@@ -1,7 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { getAnalytics } from "firebase/analytics"
-import { initializeApp } from "firebase/app"
-import { get, getDatabase, ref, set } from "firebase/database"
+import { getApp, getApps, initializeApp } from "firebase/app";
+import { get, getDatabase, ref, set } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,19 +14,22 @@ const firebaseConfig = {
   messagingSenderId: "560851073910",
   appId: "1:560851073910:web:a454769b4be0f8dbb79857",
   measurementId: "G-W2X4MWG7H6",
+};
+let app;
+if (typeof window !== "undefined") {
+  // Ensure Firebase is only initialized in the browser
+  app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 }
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig)
-const analytics = getAnalytics(app)
-export const database = getDatabase(app)
+export const database = app ? getDatabase(app) : null;
+
 export async function saveUserToFirebase(userData: any) {
   try {
-    const userRef = ref(database, `users/${userData.id}`)
+    const userRef = ref(database!, `users/${userData.id}`);
 
     // Check if user already exists
-    const snapshot = await get(userRef)
-    const existingUser = snapshot.val()
+    const snapshot = await get(userRef);
+    const existingUser = snapshot.val();
 
     // If user exists, only update if data has changed
     if (existingUser) {
@@ -39,20 +41,20 @@ export async function saveUserToFirebase(userData: any) {
         lastName: userData.lastName,
         createdAt: existingUser.createdAt, // Keep original creation date
         lastUpdated: new Date().toISOString(),
-      }
+      };
 
       // Check if any data has actually changed
       const hasChanges = Object.keys(newUserData).some(
         (key) =>
           // @ts-ignore
-          newUserData[key] !== existingUser[key] && key !== "lastUpdated",
-      )
+          newUserData[key] !== existingUser[key] && key !== "lastUpdated"
+      );
 
       if (hasChanges) {
-        await set(userRef, newUserData)
-        console.log("User data updated:", userData.id)
+        await set(userRef, newUserData);
+        console.log("User data updated:", userData.id);
       } else {
-        console.log("No changes detected for user:", userData.id)
+        console.log("No changes detected for user:", userData.id);
       }
     } else {
       // New user, save with current timestamp
@@ -64,12 +66,11 @@ export async function saveUserToFirebase(userData: any) {
         lastName: userData.lastName,
         createdAt: new Date().toISOString(),
         lastUpdated: new Date().toISOString(),
-      })
-      console.log("New user created:", userData.id)
+      });
+      console.log("New user created:", userData.id);
     }
   } catch (error) {
-    console.error("Error saving user to Firebase:", error)
-    throw error
+    console.error("Error saving user to Firebase:", error);
+    throw error;
   }
 }
-

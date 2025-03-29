@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@/context/UserContext";
 import { useEffect, useState } from "react";
 import {
   CartesianGrid,
@@ -14,17 +15,17 @@ import {
 const COLORS = ["#FF5733", "#4287f5", "#2ECC71", "#FFC300", "#9B59B6"]; // Defined colors for better visibility
 
 const API_KEY = process.env.NEXT_PUBLIC_OW_API_KEY;
-const CITY = "Palghar";
 
 export default function CityAnalytics() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { place } = useUser();
 
   useEffect(() => {
     const fetchAirQualityData = async () => {
       try {
         const response = await fetch(
-          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${CITY}&days=7&aqi=yes`
+          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${place}&days=7&aqi=yes`
         );
         const result = await response.json();
 
